@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyChat</string>
+    <string name="button_name">Кнопка</string>
 </resources>
