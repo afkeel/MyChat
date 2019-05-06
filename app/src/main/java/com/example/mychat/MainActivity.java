@@ -1,7 +1,9 @@
-package com.example.mychat;
+/*package com.example.mychat;
 
+import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,18 +21,34 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    @VisibleForTesting
+    public ProgressDialog mProgressDialog;
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+
+
     private static int MAX_MESSAGE_LENGTH = 50;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
+
     // ссылка на базу данных
-    DatabaseReference myRef = database.getReference("messages");
+
+    DatabaseReference myRef = database.getReference("users/Artem/messages");
+
 
     EditText mEditTextMessage;
     Button mSendButton;
     RecyclerView mMessagesRecycler;
     ArrayList<String> messages = new ArrayList<>();
+    //private List<Person> persons;
 
 
     @Override
@@ -42,7 +61,10 @@ public class MainActivity extends AppCompatActivity {
         mEditTextMessage = findViewById(R.id.message_input);
         mMessagesRecycler = findViewById(R.id.messages_recycler);
 
+
+        // менеджер компоновки для управления позиционированием элементов
         mMessagesRecycler.setLayoutManager(new LinearLayoutManager( this));
+        // инициализация и использование адаптера
         final DateAdapter dateAdapter = new DateAdapter(this, messages);
         mMessagesRecycler.setAdapter(dateAdapter);
 
@@ -101,5 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
+
 }
+*/
