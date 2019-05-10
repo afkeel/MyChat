@@ -1,6 +1,7 @@
 package com.example.mychat;
 
 import android.content.Intent;
+import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 Post post = dataSnapshot.getValue(Post.class);
-                messages.add(new Post(post.uid, post.msg));
+                messages.add(new Post(post.uid, post.username, post.msg));
                 dateAdapter.notifyDataSetChanged();
                 mMessagesRecycler.smoothScrollToPosition(messages.size());
             }
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             signOut();
         } else if (i == R.id.send_message_b){
             // получаем текст
-            String msg = mEditTextMessage.getText().toString();
+            final String msg = mEditTextMessage.getText().toString();
             // если текста нет
             if (msg.equals("")) {
 
@@ -115,19 +117,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
             // добавляем сообщение в бд
-            String userId = requireNonNull(mAuth.getCurrentUser()).getUid();
-            writeNewPost(userId, msg);
-            mEditTextMessage.setText("");
+            final String userId = requireNonNull(mAuth.getCurrentUser()).getUid();
+            mDatabase.child("users").child(userId).child("userdata").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    User user_arr = dataSnapshot.getValue(User.class);
+                    String username = user_arr.username;
+                    writeNewPost(userId, username, msg);
+                    mEditTextMessage.setText("");
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
     }
     // запись нового сообщения в бд
-    private void writeNewPost(String userId, String msg) {
+    private void writeNewPost(String userId, String username, String msg) {
 
         Map<String, Object> childUpdates = new HashMap<>();
         // берем уникальный ключ для сообщения
         String key = mDatabase.child("messages").push().getKey();
         // создаем сообщение через конструктор класса
-        Post post = new Post(userId, msg);
+        Post post = new Post(userId, username, msg);
         // добавляем сообщение через метод класса в HashMap
         Map<String, Object> postValues = post.toMap();
         // добавлем все postValues в HashMap

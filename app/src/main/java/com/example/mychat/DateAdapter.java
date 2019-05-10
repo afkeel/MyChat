@@ -35,9 +35,9 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
         Post messages_position = messages.get(position);
 
         String msg = messages_position.getMsg();
-        String uid = messages_position.getUid();
+        String name = messages_position.getUsername();
         holder.message.setText(msg);
-        holder.name.setText(uid);
+        holder.name.setText(name);
     }
 
     @Override
