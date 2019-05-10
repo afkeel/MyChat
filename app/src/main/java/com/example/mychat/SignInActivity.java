@@ -1,5 +1,6 @@
 package com.example.mychat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +15,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class EmailPasswordAuth extends AppCompatActivity implements View.OnClickListener{
+import java.util.Objects;
+
+public class SignInActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText mEnter_email;
     private EditText mEnter_password;
@@ -23,12 +28,13 @@ public class EmailPasswordAuth extends AppCompatActivity implements View.OnClick
     private TextView mDetailTextView;
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.email_pass_auth);
+        setContentView(R.layout.activity_sign_in);
         // Views
         mEnter_email = findViewById(R.id.fieldEmail);
         mEnter_password = findViewById(R.id.fieldPassword);
@@ -38,16 +44,20 @@ public class EmailPasswordAuth extends AppCompatActivity implements View.OnClick
         findViewById(R.id.emailSignInButton).setOnClickListener(this);
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(this);
         findViewById(R.id.signOutButton).setOnClickListener(this);
-        //Firebase
+        // Firebase
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
     // утсанавливаем текущее состаяние пользователя
     @Override
     public void onStart() {
 
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+
+        if (mAuth.getCurrentUser() != null) {
+            // если аутентификация пройдена переходим к чату
+            onAuthSuccess(mAuth.getCurrentUser());
+        }
     }
     // регистрация пользователя
     public void regIn (String email, String password){
@@ -63,15 +73,11 @@ public class EmailPasswordAuth extends AppCompatActivity implements View.OnClick
 
                         if (task.isSuccessful()){
 
-                            Toast.makeText(EmailPasswordAuth.this,"Регистрация успешна",
-                                    Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            onAuthSuccess(Objects.requireNonNull(task.getResult()).getUser());
                         } else {
 
-                            Toast.makeText(EmailPasswordAuth.this,"Не удалось зарегистрироваться",
+                            Toast.makeText(SignInActivity.this,"Не удалось зарегистрироваться",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
                         }
                     }
                 });
@@ -90,15 +96,11 @@ public class EmailPasswordAuth extends AppCompatActivity implements View.OnClick
 
                         if (task.isSuccessful()){
 
-                            Toast.makeText(EmailPasswordAuth.this,"Авторизация успешна",
-                                    Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            onAuthSuccess(Objects.requireNonNull(task.getResult()).getUser());
                         } else {
 
-                            Toast.makeText(EmailPasswordAuth.this,"Не верный логин или пароль",
+                            Toast.makeText(SignInActivity.this,"Не верный логин или пароль",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
                         }
                     }
                 });
@@ -127,14 +129,50 @@ public class EmailPasswordAuth extends AppCompatActivity implements View.OnClick
         }
         return !vld;
     }
-    // выход
-    private void signOut() {
+    //работа кнопок
+    @Override
+    public void onClick(View v) {
 
-        mAuth.signOut();
-        updateUI(null);
+        int i = v.getId();
+        if (i == R.id.emailSignInButton) {
+
+            signIn(mEnter_email.getText().toString(), mEnter_password.getText().toString());
+
+        } else if (i == R.id.emailCreateAccountButton){
+
+            regIn(mEnter_email.getText().toString(), mEnter_password.getText().toString());
+        }
     }
+    // если пользователь аутентифицирован
+    private void onAuthSuccess(FirebaseUser user) {
+
+        String username = usernameFromEmail(Objects.requireNonNull(user.getEmail()));
+        writeNewUser(user.getUid(), username, user.getEmail());
+
+        // идем в MainActivity
+        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+        finish();
+    }
+    // получаем имя из email
+    private String usernameFromEmail(String email) {
+
+        if (email.contains("@")) {
+
+            return email.split("@")[0];
+        } else {
+
+            return email;
+        }
+    }
+    // запись пользователя в бд
+    private void writeNewUser(String userId, String name, String email) {
+
+        User user = new User(name, email);
+        mDatabase.child("users").child(userId).child("username").setValue(name);
+    }
+
     // вывод сообщений и видимость кнопок
-    private void updateUI(FirebaseUser user) {
+    /*private void updateUI(FirebaseUser user) {
 
         if (user != null) {
             mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
@@ -153,23 +191,5 @@ public class EmailPasswordAuth extends AppCompatActivity implements View.OnClick
             findViewById(R.id.emailPasswordFields).setVisibility(View.VISIBLE);
             findViewById(R.id.signedLayout).setVisibility(View.GONE);
         }
-    }
-    //работа кнопок
-    @Override
-    public void onClick(View v) {
-
-        int i = v.getId();
-        if (i == R.id.emailSignInButton) {
-
-            signIn(mEnter_email.getText().toString(), mEnter_password.getText().toString());
-
-        } else if (i == R.id.emailCreateAccountButton){
-
-            regIn(mEnter_email.getText().toString(), mEnter_password.getText().toString());
-
-        } else if (i == R.id.signOutButton){
-
-            signOut();
-        }
-    }
+    }*/
 }

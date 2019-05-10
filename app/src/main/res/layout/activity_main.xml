@@ -8,9 +8,9 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/messages_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/messages_recycler"
         android:layout_weight="1"/>
 
     <LinearLayout
@@ -19,19 +19,28 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/message_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edit_text_hint"
-            android:id="@+id/message_input"
             android:textSize="24sp"
             android:inputType="text" />
 
         <Button
+            android:id="@+id/send_message_b"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/send_message_b"
             android:text="@string/send_button_name"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
+        <Button
+            android:id="@+id/signOutButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_out"
+            android:textSize="24sp"
+            android:theme="@style/ThemeOverlay.MyDarkButton" />
     </LinearLayout>
 
 </LinearLayout>

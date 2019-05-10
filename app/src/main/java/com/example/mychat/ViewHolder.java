@@ -9,12 +9,10 @@ class ViewHolder extends RecyclerView.ViewHolder {
 
     TextView message;
     TextView name;
-    ImageView photo;
     ViewHolder(View itemView){
 
         super(itemView);
-        message = itemView.findViewById(R.id.message_item);
-        //name = itemView.findViewById(R.id.person_name);
-        //photo = itemView.findViewById(R.id.person_photo);
+        message = itemView.findViewById(R.id.person_message);
+        name = itemView.findViewById(R.id.person_name);
     }
 }
