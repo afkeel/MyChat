@@ -19,7 +19,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     EditText mEditTextMessage;
     RecyclerView mMessagesRecycler;
-
-    //Map<String, String> messages = new HashMap<>();
-    //ArrayList<String> messages = new ArrayList<>();
     List<Post> messages = new ArrayList<>();
-
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -66,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                Post msg = dataSnapshot.getValue(Post.class);
-                messages.add(new Post(msg.uid, msg.msg));
+                Post post = dataSnapshot.getValue(Post.class);
+                messages.add(new Post(post.uid, post.msg));
                 dateAdapter.notifyDataSetChanged();
                 mMessagesRecycler.smoothScrollToPosition(messages.size());
             }

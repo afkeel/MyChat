@@ -168,7 +168,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void writeNewUser(String userId, String name, String email) {
 
         User user = new User(name, email);
-        mDatabase.child("users").child(userId).child("username").setValue(name);
+        mDatabase.child("users").child(userId).child("userdata").setValue(user);
     }
 
     // вывод сообщений и видимость кнопок

@@ -7,21 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // адаптер для RecyclerView
 public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-
     private  List<Post> messages;
     private LayoutInflater inflater;
-    //private Map<String, String> messages;
 
-    DateAdapter(Context context, List<Post> messages) {
+    public DateAdapter(Context context, List<Post> messages) {
 
         this.messages = messages;
         this.inflater = LayoutInflater.from(context);
@@ -38,17 +32,17 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Post post = messages.get(position);
+        Post messages_position = messages.get(position);
 
-        String msg = post.getMsg();
-        String uid = post.getUid();
+        String msg = messages_position.getMsg();
+        String uid = messages_position.getUid();
         holder.message.setText(msg);
         holder.name.setText(uid);
     }
 
     @Override
     public int getItemCount() {
+
         return messages.size();
     }
-
 }
