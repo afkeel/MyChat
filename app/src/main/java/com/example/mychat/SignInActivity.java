@@ -1,23 +1,33 @@
 package com.example.mychat;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Objects;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener{
@@ -26,9 +36,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private EditText mEnter_password;
     private TextView mStatusTextView;
     private TextView mDetailTextView;
+    public ImageView mImageView;
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    FirebaseAuth mAuth;
+    DatabaseReference mDatabase;
+    FirebaseStorage mStorage;
+    StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +53,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         mEnter_password = findViewById(R.id.fieldPassword);
         mStatusTextView = findViewById(R.id.status);
         mDetailTextView = findViewById(R.id.detail);
+        mImageView = findViewById(R.id.img_Ic_start);
         // Buttons
         findViewById(R.id.emailSignInButton).setOnClickListener(this);
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(this);
@@ -47,6 +61,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         // Firebase
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mStorage = FirebaseStorage.getInstance();
+        mStorageRef = mStorage.getReference();
     }
     // утсанавливаем текущее состаяние пользователя
     @Override
@@ -55,8 +71,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         super.onStart();
 
         if (mAuth.getCurrentUser() != null) {
-            // если аутентификация пройдена переходим к чату
-            onAuthSuccess(mAuth.getCurrentUser());
+            // идем в MainActivity
+            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            finish();
         }
     }
     // регистрация пользователя
@@ -73,7 +90,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                         if (task.isSuccessful()){
 
-                            onAuthSuccess(Objects.requireNonNull(task.getResult()).getUser());
+                            onAuthSuccess();
                         } else {
 
                             Toast.makeText(SignInActivity.this,"Не удалось зарегистрироваться",
@@ -96,7 +113,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                         if (task.isSuccessful()){
 
-                            onAuthSuccess(Objects.requireNonNull(task.getResult()).getUser());
+                            // идем в MainActivity
+                            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                            finish();
                         } else {
 
                             Toast.makeText(SignInActivity.this,"Не верный логин или пароль",
@@ -144,32 +163,51 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
     // если пользователь аутентифицирован
-    private void onAuthSuccess(FirebaseUser user) {
+    private void onAuthSuccess() {
 
-        String username = usernameFromEmail(Objects.requireNonNull(user.getEmail()));
-        writeNewUser(user.getUid(), username, user.getEmail());
-
+        String userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        String email = mAuth.getCurrentUser().getEmail();
+        String name = "NoName";
+        String surname = "NoSurname";
+        writeNewUser(userID, name, surname, email);
+        uploadFile(userID);
         // идем в MainActivity
         startActivity(new Intent(SignInActivity.this, MainActivity.class));
         finish();
     }
-    // получаем имя из email
-    private String usernameFromEmail(String email) {
-
-        if (email.contains("@")) {
-
-            return email.split("@")[0];
-        } else {
-
-            return email;
-        }
-    }
     // запись пользователя в бд
-    private void writeNewUser(String userId, String name, String email) {
+    public void writeNewUser(String userId, String name, String surname, String email) {
 
-        User user = new User(name, email);
+        User user = new User(name, surname, email);
         mDatabase.child("users").child(userId).child("userdata").setValue(user);
     }
+
+    public void uploadFile(String userID) {
+
+        StorageReference mountainsRef = mStorageRef.child("users").child(userID).child("icon_user");
+
+        Bitmap bitmap = ((BitmapDrawable) mImageView.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+            }
+        });
+    }
+
+
+
+
 
     // вывод сообщений и видимость кнопок
     /*private void updateUI(FirebaseUser user) {

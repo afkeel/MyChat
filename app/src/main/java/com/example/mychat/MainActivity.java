@@ -1,7 +1,6 @@
 package com.example.mychat;
 
 import android.content.Intent;
-import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
@@ -30,11 +29,12 @@ import static java.util.Objects.requireNonNull;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText mEditTextMessage;
+
     RecyclerView mMessagesRecycler;
     List<Post> messages = new ArrayList<>();
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    FirebaseAuth mAuth;
+    DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Buttons
         findViewById(R.id.send_message_b).setOnClickListener(this);
         findViewById(R.id.signOutButton).setOnClickListener(this);
+        findViewById(R.id.btnMenu).setOnClickListener(this);
         // Firebase
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -98,6 +99,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (i == R.id.signOutButton){
 
             signOut();
+        } else if (i == R.id.btnMenu) {
+
+            startActivity(new Intent(MainActivity.this, MenuActivity.class));
         } else if (i == R.id.send_message_b){
             // получаем текст
             final String msg = mEditTextMessage.getText().toString();
@@ -117,14 +121,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
             // добавляем сообщение в бд
-            final String userId = requireNonNull(mAuth.getCurrentUser()).getUid();
-            mDatabase.child("users").child(userId).child("userdata").addListenerForSingleValueEvent(new ValueEventListener() {
+            final String userID = requireNonNull(mAuth.getCurrentUser()).getUid();
+            mDatabase.child("users").child(userID).child("userdata").addListenerForSingleValueEvent(new ValueEventListener(){
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot){
 
                     User user_arr = dataSnapshot.getValue(User.class);
                     String username = user_arr.username;
-                    writeNewPost(userId, username, msg);
+                    writeNewPost(userID, username, msg);
                     mEditTextMessage.setText("");
                 }
 

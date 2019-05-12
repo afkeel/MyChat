@@ -15,6 +15,7 @@
 
         <ImageView
             style="@style/ThemeOverlay.FirebaseIcon"
+            android:id="@+id/img_Ic_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/desc_firebase_lockup"

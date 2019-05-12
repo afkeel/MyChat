@@ -11,9 +11,18 @@
     <string name="signed_out">Signed Out</string>
     <string name="sign_out">Выход</string>
 
+    <string name="main_menu">Меню</string>
+    <string name="save_change">Сохранить</string>
+
     <string name="emailpassword_status_fmt">Email User: %1$s (verified: %2$b)</string>
     <string name="emailpassword_title_text">Email and Password</string>
 
     <string name="firebase_status_fmt">Firebase User: %s</string>
     <string name="desc_firebase_lockup">Firebase logo and name</string>
+    <string name="add_image">Выбрать изображение</string>
+    <string name="menu_name">Имя:</string>
+    <string name="name_text_hint">Введите имя:</string>
+    <string name="menu_surname">Фамилия:</string>
+    <string name="surname_text_hint">Введите фамилию:</string>
+    <string name="menu_email">Email:</string>
 </resources>
