@@ -21,20 +21,24 @@ import java.util.List;
 public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private  List<Post> messages;
-    private LayoutInflater inflater;
+    //private LayoutInflater inflater;
+    private Context mContext;
     FirebaseStorage mStorage;
     StorageReference mStorageRef;
 
+
     public DateAdapter(Context context, List<Post> messages) {
 
+        mContext = context;
         this.messages = messages;
-        this.inflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.item_message, parent, false);
         return new ViewHolder(v);
     }
@@ -55,7 +59,13 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         StorageReference imageRef = mStorageRef.child("users").child(uid).child("icon_user");
 
-        imageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        GlideApp.with (mContext)
+                .load(imageRef)
+                .placeholder(R.mipmap.ic_launcher)
+                .into(holder.image);
+
+       /* final long ONE_MEGABYTE = 1024 * 1024;
+        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
 
             @Override
             public void onSuccess(byte[] bytes) {
@@ -69,7 +79,7 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
             public void onFailure(@NonNull Exception exception) {
 
             }
-        });
+        });*/
     }
 
     @Override
@@ -78,10 +88,10 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
         return messages.size();
     }
 
-    public Bitmap ByteArrayToBitmap(byte[] bytes)
-    {
-        ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
-        Bitmap bitmapProfile = BitmapFactory.decodeStream(arrayInputStream);
-        return bitmapProfile;
-    }
+//    public Bitmap ByteArrayToBitmap(byte[] bytes)
+//    {
+//        ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
+//        Bitmap bitmapProfile = BitmapFactory.decodeStream(arrayInputStream);
+//        return bitmapProfile;
+//    }
 }
