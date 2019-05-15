@@ -9,7 +9,13 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d287d0a-0f02-467c-b3b2-e5f8d6686661" name="Default Changelist" comment="" />
+    <list default="true" id="8d287d0a-0f02-467c-b3b2-e5f8d6686661" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/mychat/DateAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/mychat/DateAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/mychat/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/mychat/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/mychat/MenuActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/mychat/MenuActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/item_message.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/item_message.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
