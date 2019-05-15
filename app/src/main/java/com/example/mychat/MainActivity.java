@@ -1,7 +1,6 @@
 package com.example.mychat;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
@@ -12,8 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -21,11 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,9 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     FirebaseAuth mAuth;
     DatabaseReference mDatabase;
-
-    FirebaseStorage mStorage;
-    StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,26 +90,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-/*
-        mStorage = FirebaseStorage.getInstance();
-        mStorageRef = mStorage.getReference();
-        String userID = requireNonNull(mAuth.getCurrentUser()).getUid();
-
-        Uri file = Uri.fromFile(new File("C:/mychat/icon_user.png"));
-        StorageReference riversRef = mStorageRef.child("users").child(userID).child("" + file.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(file);
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-            }
-        });*/
     }
     // слушаем кнопки
     @Override

@@ -121,7 +121,7 @@ public class MenuActivity extends MainActivity implements View.OnClickListener {
             //mImageView.buildDrawingCache();
             Bitmap bitmap = ((BitmapDrawable) mIVMenu.getDrawable()).getBitmap();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
 
             UploadTask uploadTask = mountainsRef.putBytes(data);
