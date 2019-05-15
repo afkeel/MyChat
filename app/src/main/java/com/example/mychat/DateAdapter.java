@@ -22,6 +22,8 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private  List<Post> messages;
     private LayoutInflater inflater;
+    private Context mContext;
+
     FirebaseStorage mStorage;
     StorageReference mStorageRef;
 
@@ -29,6 +31,7 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         this.messages = messages;
         this.inflater = LayoutInflater.from(context);
+        mContext = context;
     }
 
     @NonNull
@@ -54,6 +57,10 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
         String uid = messages_position.getUid();
 
         StorageReference imageRef = mStorageRef.child("users").child(uid).child("icon_user");
+
+        GlideApp.with(mContext)
+                .load(imageRef)
+                .into(holder.image);
 
         imageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
 
