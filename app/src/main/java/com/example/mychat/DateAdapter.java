@@ -21,8 +21,14 @@ import java.util.List;
 public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private  List<Post> messages;
+<<<<<<< HEAD
     //private LayoutInflater inflater;
     private Context mContext;
+=======
+    private LayoutInflater inflater;
+    private Context mContext;
+
+>>>>>>> eac2ee4a5028d16131ee1fe377193d20b456c5f3
     FirebaseStorage mStorage;
     StorageReference mStorageRef;
 
@@ -31,6 +37,11 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         mContext = context;
         this.messages = messages;
+<<<<<<< HEAD
+=======
+        this.inflater = LayoutInflater.from(context);
+        mContext = context;
+>>>>>>> eac2ee4a5028d16131ee1fe377193d20b456c5f3
     }
 
     @NonNull
@@ -59,6 +70,7 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         StorageReference imageRef = mStorageRef.child("users").child(uid).child("icon_user");
 
+<<<<<<< HEAD
         GlideApp.with (mContext)
                 .load(imageRef)
                 .placeholder(R.mipmap.ic_launcher)
@@ -66,6 +78,13 @@ public class DateAdapter extends RecyclerView.Adapter<ViewHolder> {
 
        /* final long ONE_MEGABYTE = 1024 * 1024;
         imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+=======
+        GlideApp.with(mContext)
+                .load(imageRef)
+                .into(holder.image);
+
+        imageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+>>>>>>> eac2ee4a5028d16131ee1fe377193d20b456c5f3
 
             @Override
             public void onSuccess(byte[] bytes) {
