@@ -7,12 +7,47 @@
     tools:context="MainActivity"
     android:orientation="vertical"
     >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnMenu"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/baseline_menu_white_18dp"
+            android:textSize="24sp"
+            android:theme="@style/ThemeOverlay.MyDarkButton" />
+
+        <Button
+            android:id="@+id/qwe"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="58dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textSize="24sp"
+            android:theme="@style/ThemeOverlay.MyDarkButton" />
+
+        <Button
+            android:id="@+id/signOutButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/baseline_exit_to_app_white_18dp"
+            android:textSize="24sp"
+
+            android:theme="@style/ThemeOverlay.MyDarkButton" />
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/messages_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,31 +69,5 @@
             android:text="@string/send_button_name"
             android:textSize="24sp"
             />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <Button
-                android:id="@+id/btnMenu"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/main_menu"
-                android:textSize="24sp"
-                android:layout_weight = "1"
-                android:theme="@style/ThemeOverlay.MyDarkButton" />
-
-            <Button
-                android:id="@+id/signOutButton"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/sign_out"
-                android:textSize="24sp"
-                android:layout_weight = "1"
-                android:theme="@style/ThemeOverlay.MyDarkButton" />
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
