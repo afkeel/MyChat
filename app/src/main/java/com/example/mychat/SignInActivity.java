@@ -90,7 +90,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                         if (task.isSuccessful()){
 
-                            onAuthSuccess();
+                            regInSuccess();
                         } else {
 
                             Toast.makeText(SignInActivity.this,"Не удалось зарегистрироваться",
@@ -163,7 +163,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
     // если пользователь аутентифицирован
-    private void onAuthSuccess() {
+    private void regInSuccess() {
 
         String userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         String email = mAuth.getCurrentUser().getEmail();

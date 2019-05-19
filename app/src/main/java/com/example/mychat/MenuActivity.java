@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,6 +39,7 @@ public class MenuActivity extends MainActivity implements View.OnClickListener {
     StorageReference mStorageRef;
 
     private final int Pick_image = 1;
+    private Drawable mDrawable = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
